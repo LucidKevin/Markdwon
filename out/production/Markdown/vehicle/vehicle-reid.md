@@ -2,23 +2,6 @@
 
 ## 2025
 
-#### CLIP-SENet: CLIP-based Semantic Enhancement Network for Vehicle Re-identification
-
-> **axiv **2025. [(PDF)](/Users/huangkaiwen/Desktop/Paper/vehicle-reid/2025-ClipSE.pdf) [link](https://scholar.google.com/scholar?hl=zh-CN&as_sdt=0%2C5&as_ylo=2025&q=CLIP-SENet%3A+CLIP-based+Semantic+Enhancement+Network+for+Vehicle+Re-identification&btnG=)
->
-> ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/c2575ad0-76d3-4c0e-a29d-d65e2cbc3791.png)
->
-> **论文引用**：
->
-> ```
-> @article{lu2025clip,
->   title={CLIP-SENet: CLIP-based Semantic Enhancement Network for Vehicle Re-identification},
->   author={Lu, Liping and Fu, Zihao and Chu, Duanfeng and Wang, Wei and Xu, Bingrong},
->   journal={arXiv preprint arXiv:2502.16815},
->   year={2025}
-> }
-> ```
-
 #### Region-guided spatial feature aggregation network for vehicle re-identification
 
 > **Engineering Applications of Artificial Intelligence **2025. [(PDF)](/Users/huangkaiwen/Desktop/Paper/vehicle-reid/2025-rgsf-ReID.pdf) [link](https://scholar.google.com/scholar?hl=zh-CN&as_sdt=0%2C5&as_ylo=2025&q=Region-guided+spatial+feature+aggregation+network+for+vehicle+re-identification&btnG=)
