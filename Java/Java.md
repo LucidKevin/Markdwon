@@ -1725,9 +1725,77 @@ public class CodeDemo {
 - 如果参数有且只有一个，那么小括号可以省略
 - 如果代码块的语句只有一条，可以忽略大括号和分号，甚至return 语句
 
+**Lambda表达式的注意事项**
 
+注意事项：
 
+- 使用Lambda必须要有接口，并且要求接口有且仅有一个抽象方法
+- 必须有上下文环境，才能推导出Lambda对应的接口
+  - 根据局部变量的赋值得知Lambda对应的接口：Runnable r = （）-> System.out.println(”Lambda表达式“);
+  - 根据调用方法的参数得知Lambda对应的接口：new Thread(()->System.out.println(“Lambda表达式”)).start();
 
+**Lambda表达式和匿名内部类的区别**
+
+所需类型不同：
+
+- 匿名内部类：可以是接口，也可以是抽象类，还可以是具体类
+- Lambda表达式：只能是接口
+
+使用限制不同：
+
+- 如果接口中有且仅有一个抽象方法，可以使用Lambda表达式，也可以使用匿名内部类
+- 如果接口中多于一个抽象方法，只能使用匿名内部类，而不能使用Lambda表达式
+
+实现原理不同：
+
+- 匿名内部类：编译之后，产生一个单独的.class字节码文件
+- Lambda表达式：编译之后，没有一个单独的.class字节码文件，对应的字节码会在运行的时候动态生成
+
+#### 方法引用
+
+- ：：该符号为引用运算符，而它所在表达式被称为方法引用
+- Lambda表达式：usePrintable(s->System.out.print(s));
+- 方法引用：usePrinable(System.out::println)
+
+**Lambda表达式支持的方法引用**
+
+常见的引用方式：
+
+- 引用类方法
+- 引用对象的实例方法
+- 引用类的实例方法
+- 引用构造器
+
+**引用类静态方法**
+引用类方法，其实就是引用类的静态方法
+
+- 格式：类名：：静态方法
+
+- 范例：Integer::parseInt
+
+  - Integer类的方法：public static int parsenInt(String s),将此String转换为int类型数据
+
+  Lambda表达式被类方法替代的时候，它的形式参数全部传递给静态方法作为参数
+
+**引用对象的实例方法**
+
+引用对象的实例方法，其实是引用类中的成员方法
+
+- 格式：对象：：成员方法
+- 范式：”HelloWorld“::toUpperCase
+
+**引用类的实例方法**
+
+引用类的实例方法，其实就是引用类中的成员方法
+
+- 格式：类名：：成员方法
+
+- String::substring
+
+**引用构造器**
+
+- 格式：类名：：new
+- 范式：Student：：new
 
 ### JavaAPI
 
