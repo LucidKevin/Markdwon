@@ -17,11 +17,29 @@ Java代码编写
 - 类名：首字母大写，后面单词首字母大写
 - 方法名：所有方法名小写字母开头，后面单词首字母大写
 
+---
+
+#### Java包
+
+包：分门别类的管理各种不同的技术，便于管理技术，扩展技术，阅读技术
+
+定义包的格式：`package 包名`，必须放在类名的最上面
+
+导包格式：`import 包名.类名`
+
+相同包下的类可以直接访问；不同包下的类必须导包才可以使用
+
 ***
 
 ### Java的符号
 
 #### Java的标识符
+
+Java 所有的组成部分都需要的名字。类名、变量名以及方法名都被称为标识符
+
+java 的标识符需注意以下内容：
+
+- 所有标识符应该以字母（ A-Z 或者 a-z），美元符号（$）
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/c6f2d9aa-c643-4180-9a54-6fad60082646.png)
 
@@ -31,39 +49,254 @@ Java代码编写
 
 **权限修饰符**
 
-- private：被声明为private的方法，变量和构造方法只能被所属类访问，并且类和接口不能声明为private，声明为私有访问类型的变量只能通过getter 方法访问
-- public：声明为public的类，方法，构造方法和结构都能够被其他类访问，类的所有共有方法和变量都能被其子类继承
-- protected：声明为protected的变量，方法和构造器能被同一个包中的任何类方法访问，也能被不同包的子类访问，protected不能修饰类和接口，方法和成员变量可以声明为protected，但是接口的成员变量和成员方法不能声明为protected
-- 继承规则：
+权限修饰符：有四种**（private -> 缺省 -> protected - > public ）**
+可以修饰成员变量，修饰方法，修饰构造器，内部类，不同修饰符修饰的成员能够被访问的权限将受到限制
 
-- private无法继承
-- public继承之后只能是public
-- protected继承之后可以是protected或public，不能是private
+| 四种修饰符访问权限 | private | 缺省 | protected | public |
+| ------------------ | :-----: | :--: | :-------: | :----: |
+| 本类中             |    √    |  √   |     √     |   √    |
+| 本包下的子类中     |    X    |  √   |     √     |   √    |
+| 本包下其他类中     |    X    |  √   |     √     |   √    |
+| 其他包下的子类中   |    X    |  X   |     √     |   √    |
+| 其他包下的其他类中 |    X    |  X   |     X     |   √    |
+
+protected 用于修饰成员，表示在继承体系中成员对于子类可见
+
+* 基类的 protected 成员是包内可见的，并且对子类可见
+* 若子类与基类不在同一包中，那么子类实例可以访问其从基类继承而来的 protected 方法（重写），而不能访问基类实例的 protected 方法
+
+**1、public** 
+
+- 访问范围：任何类都可以访问
+- 适用对象：类、接口、方法、变量
+- 特点
+  - 最高访问级别
+  - 被public 修饰的类必须与文件名相同
+  - 常用于定义 API 和对外公开的方法
+
+**2、protected**
+
+- 访问范围：
+  - 同一个包内的所有类
+  - 不同包的子类
+- 适用对象：方法、变量（不能用于顶级类）
+- 特点：
+  - 主要用于继承类
+  - 子类可以通过继承访问 protected 成员
+
+**3、default** 
+
+- 访问范围 ：同一个包内的类
+- 适用对象：类、接口、方法、变量
+- 特点：
+  - 不使用任何修饰符即为default
+  - 也称为 "包访问权限"
+  - 常用于包内共享的实现细节
+
+**4、private**
+
+- 访问范围：仅限本类内部
+- 适用对象：方法、变量（不能用于顶级类）
+- 特点：
+  - 最低访问级别
+  - 实现封装的关键
+  - 常用于隐藏细节
 
 ***
 
 **非权限修饰符**
 
-- final：
+**1、static**
 
-  - final变量值无法改变
-  - final方法可以继承但是无法修改
-  - final类无法继承
+**基本介绍**
 
-- static：
+Java 是通过成员变量是否有 static 修饰来区分是类的还是属于对象的
 
-  - 静态变量：声明独立于对象的静态变量，局部变量不能被声明static
-  - 静态方法：静态方法不能使用类的非静态变量
+按照有无 static 修饰，成员变量和方法可以分为：
 
-- abstract：
+* 成员变量：
+  * 静态成员变量（类变量）：static 修饰的成员变量，属于类本身，**与类一起加载一次，只有一个**，直接用类名访问即可
+  * 实例成员变量：无 static 修饰的成员变量，属于类的每个对象的，**与类的对象一起加载**，对象有多少个，实例成员变量就加载多少个，必须用类的对象来访问
 
-  - 抽象类：不能用来实例化对象，一个类如果包含抽象类，则该类一定要被声明为抽象类，抽象类可以包括抽象方法和非抽象方法
-  
-  - 抽象方法：没有任何实现的方法，具体实现需要由子类提供
-  
-- synchronized：
+* 成员方法：
+  * 静态方法：有 static 修饰的成员方法称为静态方法也叫类方法，属于类本身的，直接用类名访问即可
+  * 实例方法：无 static 修饰的成员方法称为实例方法，属于类的每个对象的，必须用类的对象来访问
 
-  声明的的方法统一时间只能被一个线程访问
+**static 用法**
+
+成员变量的访问语法：
+
+* 静态成员变量：只有一份可以被类和类的对象**共享访问**
+  * 类名.静态成员变量（同一个类中访问静态成员变量可以省略类名不写）
+  * 对象.静态成员变量（不推荐）
+
+* 实例成员变量：
+  * 对象.实例成员变量（先创建对象）
+
+成员方法的访问语法：
+
+* 静态方法：有 static 修饰，属于类
+
+  * 类名.静态方法（同一个类中访问静态成员可以省略类名不写）
+  * 对象.静态方法（不推荐，参考 JVM → 运行机制 → 方法调用）
+
+* 实例方法：无 static 修饰，属于对象
+
+  * 对象.实例方法
+
+  ```java
+  public class Student {
+      // 1.静态方法：有static修饰，属于类，直接用类名访问即可！
+      public static void inAddr(){ }
+      // 2.实例方法：无static修饰，属于对象，必须用对象访问！
+      public void eat(){}
+      
+      public static void main(String[] args) {
+          // a.类名.静态方法
+          Student.inAddr();
+          inAddr();
+          // b.对象.实例方法
+          // Student.eat(); // 报错了！
+          Student sea = new Student();
+          sea.eat();
+      }
+  }
+  ```
+
+**两个问题**
+
+内存问题：
+
+* 栈内存存放 main 方法和地址
+
+* 堆内存存放对象和变量
+
+* 方法区存放 class 和静态变量（jdk8 以后移入堆）
+
+访问问题：
+
+* 实例方法是否可以直接访问实例成员变量？可以，因为它们都属于对象
+* 实例方法是否可以直接访问静态成员变量？可以，静态成员变量可以被共享访问
+* 实例方法是否可以直接访问实例方法? 可以，实例方法和实例方法都属于对象
+* 实例方法是否可以直接访问静态方法？可以，静态方法可以被共享访问
+* 静态方法是否可以直接访问实例变量？ 不可以，实例变量**必须用对象访问**！！
+* 静态方法是否可以直接访问静态变量？ 可以，静态成员变量可以被共享访问。
+* 静态方法是否可以直接访问实例方法? 不可以，实例方法必须用对象访问！！
+* 静态方法是否可以直接访问静态方法？可以，静态方法可以被共享访问！
+
+- 静态方法不能访问非静态成员
+
+---
+
+**2、final**
+
+**基本介绍**
+
+final 用于修饰：类，方法，变量
+
+* final 修饰类，类不能被继承了，类中的方法和变量可以使用
+* final 可以修饰方法，方法就不能被重写
+* final 修饰变量总规则：变量有且仅能被赋值一次
+
+final 和 abstract 的关系是**互斥关系**，不能同时修饰类或者同时修饰方法
+
+**修饰变量**
+
+**静态变量**
+
+final 修饰静态成员变量，变量变成了常量
+
+常量：有 public static final 修饰，名称字母全部大写，多个单词用下划线连接
+
+final 修饰静态成员变量可以在哪些地方赋值：
+
+1. 定义的时候赋值一次
+
+2. 可以在静态代码块中赋值一次
+
+```java
+public class FinalDemo {
+	//常量：public static final修饰，名称字母全部大写，下划线连接。
+    public static final String SCHOOL_NAME = "张三" ;
+    public static final String SCHOOL_NAME1;
+
+    static{
+        //SCHOOL_NAME = "java";//报错
+        SCHOOL_NAME1 = "张三1";
+    }
+}
+```
+
+**实例变量**
+
+final 修饰变量的总规则：有且仅能被赋值一次
+
+final 修饰实例成员变量可以在哪些地方赋值 1 次：
+
+1. 定义的时候赋值一次
+2. 可以在实例代码块中赋值一次
+3. 可以在每个构造器中赋值一次
+
+```java
+public class FinalDemo {
+    private final String name = "张三" ;
+    private final String name1;
+    private final String name2;
+    {
+        // 可以在实例代码块中赋值一次。
+        name1 = "张三1";
+    }
+	//构造器赋值一次
+    public FinalDemo(){
+        name2 = "张三2";
+    }
+    public FinalDemo(String a){
+        name2 = "张三2";
+    }
+
+    public static void main(String[] args) {
+        FinalDemo f1 = new FinalDemo();
+        //f1.name = "张三1"; // 第二次赋值 报错！
+    }
+}
+```
+
+---
+
+**3、abstract**
+
+- 作用：标识不完整的实现
+- 适用对象：类、方法
+- 特点：
+  - 抽象类不能实例化
+  - 抽象方法没有实现体
+  - 包含抽象方法的类必须是抽象类
+
+**4、synchronize**
+
+- 作用：实现线程同步
+- 适用对象：方法、代码块
+- 特点：
+  - 同一时间只能有一个线程访问
+  - 保证线程安全
+  - 可能影响性能
+
+**5、transient**
+
+- 作用：标记不被序列化的字段
+- 适用对象：变量
+
+- 特点：
+  - 用于对象序列化时，隐藏敏感数据字段
+
+**6、volatile**
+
+- 作用：保证多线程可见性
+- 适用对象：变量
+- 特点：
+  - 直接从主内存读写，不缓存
+  - 保证变量的修改对所有线程立即可见
+  - 不保证原子性
 
 ***
 
@@ -84,9 +317,7 @@ Java代码编写
 
 #### Java关键字
 
-![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/95eea434-9ed8-41f6-a74d-bdbce8cccb50.png)
-
-### ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/aea9c89e-b01e-4a2e-9388-34a292443023.png)
+**instanceof：**判断左边的对象是否是右边的类的实例，或者是其直接或间接子类，或者是其接口的实现类
 
 ***
 
@@ -435,6 +666,93 @@ public class Test1 {
 
 ***
 
+### Java接口
+
+#### 基本特性
+
+- 接口中的方法默认是 public  abstract的（Java 8 之前）
+- 接口中变量默认是public static final
+- 接口不能有构造方法，不能被实例化
+- 一个类可以实现多个接口（解决 Java 单继承的限制）
+- 接口可以继承多个接口
+
+---
+
+#### 函数式接口
+
+**简介**
+
+在Java中，函数式接口（Function Interface）是指仅包含一个抽象方法的接口（可以包含多个默认方法、静态方法，或从`Object`类继承的方法）。它的核心作用是作为 Lambda表达式和方法引用的 "载体"，是 Java8 引入函数式编程的基础
+
+**核心特点**
+
+**1、单一抽象方法：**接口中只有一个抽象方法（未被deafault 或 static修饰的方法）
+
+**2、可被`@FunctionalInterface` 注解标识**：该注解用于显式声明接口为函数式接口，编译器会校验其是否符合"单一抽象"规则（非强制，但推荐使用，用于增强代码可读性）
+
+**3、支持Lambda 表达式：**只有函数式接口可以接收 Lambda 表达式，因为 Lambda 本质是 "匿名函数"，需要通过接口的抽象方法来确定参数和返回值类型
+
+**Java 标准库中的常用函数式接口（`java.util.function` 包）**
+
+| 类型       | 接口                | 抽象方法            | 用途描述                   | 示例                                   |
+| ---------- | ------------------- | ------------------- | -------------------------- | -------------------------------------- |
+| 供给型     | `Supplier<T>`       | `T get()`           | 提供一个 `T` 类型的数据    | 生成随机数：`() -> Math.random()`      |
+| 消费型     | `Consumer<T>`       | `void accept(T t)`  | 消费一个 `T` 类型的数据    | 打印数据：`s -> System.out.println(s)` |
+| 函数型     | `Function<T, R>`    | `R apply(T t)`      | 将 `T` 类型转换为 `R` 类型 | 字符串转长度：`s -> s.length()`        |
+| 断言型     | `Predicate<T>`      | `boolean test(T t)` | 判断 `T` 类型是否满足条件  | 检查正数：`n -> n > 0`                 |
+| 二元函数型 | `BiFunction<T,U,R>` | `R apply(T t, U u)` | 接收两个参数，返回一个结果 | 两数相加：`(a,b) -> a + b`             |
+
+**其他常见函数式接口（非 `java.util.function`）**
+
+- `Runnable`：抽象方法 `void run()`（无参数无返回值），用于线程任务
+- `Callable<V>`：抽象方法 `V call() throws Exception` （无参有返回值，可抛异常），用于有返回值的线程任务
+- `Comparator<T>`：抽象方法 `int compare(T o1, T o2)` （比较两个对象），用于排序
+
+---
+
+#### Lambda
+
+组成Lambda表达式的三要素：形式参数，箭头，代码块
+
+**Lambda表达式格式：**
+
+- 格式：（形式参数）--> {代码块}
+- 形式参数：如果有多个参数，用逗号隔开；如果没有参数，留空即可
+- ->：由英文中画线和大于符号组成
+- 代码块：具体要做的事情
+
+**Lambda表达式的省略模式**：
+
+- 参数类型可以省略。如果有多个参数的情况下，不能只省略一个
+- 如果参数有且只有一个，那么小括号可以省略
+- 如果代码块的语句只有一条，可以忽略大括号和分号，甚至return 语句
+
+**Lambda表达式的注意事项**
+
+注意事项：
+
+- 使用Lambda必须要有接口，并且要求接口有且仅有一个抽象方法
+- 必须有上下文环境，才能推导出Lambda对应的接口
+  - 根据局部变量的赋值得知Lambda对应的接口：Runnable r = （）-> System.out.println(”Lambda表达式“);
+  - 根据调用方法的参数得知Lambda对应的接口：new Thread(()->System.out.println(“Lambda表达式”)).start();
+
+**Lambda表达式和匿名内部类的区别**
+
+所需类型不同：
+
+- 匿名内部类：可以是接口，也可以是抽象类，还可以是具体类
+- Lambda表达式：只能是接口
+
+使用限制不同：
+
+- 如果接口中有且仅有一个抽象方法，可以使用Lambda表达式，也可以使用匿名内部类
+- 如果接口中多于一个抽象方法，只能使用匿名内部类，而不能使用Lambda表达式
+
+实现原理不同：
+
+- 匿名内部类：编译之后，产生一个单独的.class字节码文件
+- Lambda表达式：编译之后，没有一个单独的.class字节码文件，对应的字节码会在运行的时候动态生成
+
 ### Java方法
 
 #### 方法概述
@@ -623,6 +941,147 @@ Java 的参数是以**值传递**的形式传入方法中
   }
   ```
 
+
+
+#### 方法引用
+
+- ：：该符号为引用运算符，而它所在表达式被称为方法引用
+- Lambda表达式：usePrintable(s->System.out.print(s));
+- 方法引用：usePrinable(System.out::println)
+
+**Lambda表达式支持的方法引用**
+
+常见的引用方式：
+
+- 引用类方法
+- 引用对象的实例方法
+- 引用类的实例方法
+- 引用构造器
+
+**引用类静态方法**
+引用类方法，其实就是引用类的静态方法
+
+- 格式：类名：：静态方法
+
+- 范例：Integer::parseInt
+
+  - Integer类的方法：public static int parsenInt(String s),将此String转换为int类型数据
+
+  Lambda表达式被类方法替代的时候，它的形式参数全部传递给静态方法作为参数
+
+**引用对象的实例方法**
+
+引用对象的实例方法，其实是引用类中的成员方法
+
+- 格式：对象：：成员方法
+- 范式：”HelloWorld“::toUpperCase
+
+**引用类的实例方法**
+
+引用类的实例方法，其实就是引用类中的成员方法
+
+- 格式：类名：：成员方法
+
+- String::substring
+
+**引用构造器**
+
+- 格式：类名：：new
+- 范式：Student：：new
+
+
+
+#### 方法访问
+
+子类继承了父类就得到了父类的方法，**可以直接调用**，受权限修饰符的限制，也可以重写方法
+
+方法重写：子类重写一个与父类申明一样的方法来**覆盖**父类的该方法
+
+方法重写的校验注解：@Override
+
+* 方法加了这个注解，那就必须是成功重写父类的方法，否则报错
+* @Override 优势：可读性好，安全，优雅
+
+**子类可以扩展父类的功能，但不能改变父类原有的功能**，重写有以下三个限制：
+
+- 子类方法的访问权限必须大于等于父类方法
+- 子类方法的返回类型必须是父类方法返回类型或为其子类型
+- 子类方法抛出的异常类型必须是父类抛出异常类型或为其子类型
+
+继承中的隐藏问题：
+
+- 子类和父类方法都是静态的，那么子类中的方法会隐藏父类中的方法
+- 在子类中可以定义和父类成员变量同名的成员变量，此时子类的成员变量隐藏了父类的成员变量，在创建对象为对象分配内存的过程中，**隐藏变量依然会被分配内存**
+
+---
+
+#### 异常处理
+
+Java 中的异常处理是保障程序健壮性的核心机制，用于应对程序运行时的非预期情况（如文件不存在、网络中断、数组越界等）。它通过规范化的方式捕获、处理异常，避免程序直接崩溃，并提供错误信息以便调试
+
+**一、异常的本质与分类**
+
+异常本质上是程序运行时抛出的异常对象，所有异常都继承自 `Throwable` 类，主要分类两类：
+
+1. `Error`（错误）
+
+- 由 JVM 生成，代表系统级错误（如内存溢出`OutOfMemoryError`、栈溢出`StackOverflowError`）,程序无法处理，也不应该捕获
+- 通常是硬件或顶层虚拟机的问题，开发者需通过优化代码（如避免无限递归）或调整环境（如增加内存）解决
+
+2. `Exception`（异常）
+
+- 程序运行时的可预期错误，开发者可以捕获并处理。分为两类：
+
+  - **受检异常**（Checked Exception）
+
+    继承自 `Exceptipon` 但不继承 `RuntimeException`，编译时必须显式处理（捕获或声明抛出），否则编译报错
+
+    典型例子：`IOException`（文件操作错误）、`SQLException`（数据库操作错误）
+
+  - **非受检错误**（Unchecked Exception）
+
+    继承自 `RuntimeException`，编译时无需强制处理，通常是代码逻辑错误导致
+
+    典型例子：`NullPointerException`（空指针）、`IndexOutBoundsException`（数组越界）
+
+**二、异常处理的核心机制**
+
+Java 通过 `try-catch-finally`、`throw`、`throws` 关键字实现异常处理，核心流程是：捕获异常 --> 处理异常 --> 释放资源
+
+**1、`try-catch`：捕获并处理异常**
+
+- `try`块：包裹可能抛出异常的代码（如果执行中出现异常，会立即跳转到对应的`catch`块）。
+- `catch`块：声明要捕获的异常类型，处理异常（如打印错误信息、重试操作等）。
+
+**2、`finally`：释放资源（可选）**
+
+`finally`块无论是否发生异常，都会执行（除非 JVM 退出，如`System.exit(0)`），通常用于释放资源（如关闭文件、网络连接）
+
+**3、`try-with-resouces`：自动释放资源（Java 7+）**
+
+对于实现`AutoCloseable`接口的资源（如`FileReader`、`Socket`），可通过`try-with-resources`自动关闭，无需手动在`finally`中释放，代码更简洁。
+
+**4、`throw`：主动抛出异常**
+
+在方法内部，通过 `throw` 关键字主动抛出异常对象（通常用于检测非法逻辑）
+
+**5、`throws`：声明方法可能抛出的异常**
+
+**三、自定义异常**
+
+当 Java 内置异常无法满足业务需求时，可自定义异常（通常继承`Exception` 或 `RuntimeException`）
+
+- 继承 `Exception`：成为受检异常（编译时需处理）
+- 继承`RuntimeException`：称为非受检异常（编译时无需处理）
+
+**四、异常处理的最佳实践**
+
+1. **避免捕获所有异常**：不要用`catch (Exception e)`捕获所有异常，可能掩盖真正的错误（如`Error`）。
+2. **不忽略异常**：空的`catch`块（`catch (Exception e) {}`）会导致错误无法被发现，至少打印异常信息。
+3. **早抛出，晚捕获**：异常发生时尽早抛出（如参数校验失败时），在合适的高层统一处理（如 UI 层展示错误信息）。
+4. **优先使用非受检异常**：业务逻辑错误建议用`RuntimeException`子类（减少代码中冗余的`try-catch`）。
+5. **用`try-with-resources`管理资源**：避免手动关闭资源时的遗漏或错误。
+
 ***
 
 ### Java类
@@ -696,18 +1155,6 @@ public class ClassDemo {
 
 ***
 
-#### 包
-
-包：分门别类的管理各种不同的技术，便于管理技术，扩展技术，阅读技术
-
-定义包的格式：`package 包名`，必须放在类名的最上面
-
-导包格式：`import 包名.类名`
-
-相同包下的类可以直接访问；不同包下的类必须导包才可以使用
-
-***
-
 #### 封装
 
 封装的哲学思维：合理隐藏，合理暴露
@@ -731,86 +1178,6 @@ this 关键字的作用：
 * this 出现在方法中：**哪个对象调用这个方法 this 就代表谁**
 * this 可以出现在构造器中：代表构造器正在初始化的那个对象
 * this 可以区分变量是访问的成员变量还是局部变量
-
-***
-
-#### static
-
-基本介绍
-
-Java 是通过成员变量是否有 static 修饰来区分是类的还是属于对象的
-
-按照有无 static 修饰，成员变量和方法可以分为：
-
-* 成员变量：
-  * 静态成员变量（类变量）：static 修饰的成员变量，属于类本身，**与类一起加载一次，只有一个**，直接用类名访问即可
-  * 实例成员变量：无 static 修饰的成员变量，属于类的每个对象的，**与类的对象一起加载**，对象有多少个，实例成员变量就加载多少个，必须用类的对象来访问
-
-* 成员方法：
-  * 静态方法：有 static 修饰的成员方法称为静态方法也叫类方法，属于类本身的，直接用类名访问即可
-  * 实例方法：无 static 修饰的成员方法称为实例方法，属于类的每个对象的，必须用类的对象来访问
-
-**static** 用法
-
-成员变量的访问语法：
-
-* 静态成员变量：只有一份可以被类和类的对象**共享访问**
-  * 类名.静态成员变量（同一个类中访问静态成员变量可以省略类名不写）
-  * 对象.静态成员变量（不推荐）
-
-* 实例成员变量：
-  * 对象.实例成员变量（先创建对象）
-
-成员方法的访问语法：
-
-* 静态方法：有 static 修饰，属于类
-
-  * 类名.静态方法（同一个类中访问静态成员可以省略类名不写）
-  * 对象.静态方法（不推荐，参考 JVM → 运行机制 → 方法调用）
-
-* 实例方法：无 static 修饰，属于对象
-
-  * 对象.实例方法
-
-  ```java
-  public class Student {
-      // 1.静态方法：有static修饰，属于类，直接用类名访问即可！
-      public static void inAddr(){ }
-      // 2.实例方法：无static修饰，属于对象，必须用对象访问！
-      public void eat(){}
-      
-      public static void main(String[] args) {
-          // a.类名.静态方法
-          Student.inAddr();
-          inAddr();
-          // b.对象.实例方法
-          // Student.eat(); // 报错了！
-          Student sea = new Student();
-          sea.eat();
-      }
-  }
-  ```
-
-**两个问题**
-
-内存问题：
-
-* 栈内存存放 main 方法和地址
-
-* 堆内存存放对象和变量
-
-* 方法区存放 class 和静态变量（jdk8 以后移入堆）
-
-访问问题：
-
-* 实例方法是否可以直接访问实例成员变量？可以，因为它们都属于对象
-* 实例方法是否可以直接访问静态成员变量？可以，静态成员变量可以被共享访问
-* 实例方法是否可以直接访问实例方法? 可以，实例方法和实例方法都属于对象
-* 实例方法是否可以直接访问静态方法？可以，静态方法可以被共享访问
-* 静态方法是否可以直接访问实例变量？ 不可以，实例变量**必须用对象访问**！！
-* 静态方法是否可以直接访问静态变量？ 可以，静态成员变量可以被共享访问。
-* 静态方法是否可以直接访问实例方法? 不可以，实例方法必须用对象访问！！
-* 静态方法是否可以直接访问静态方法？可以，静态方法可以被共享访问！！
 
 ***
 
@@ -910,28 +1277,6 @@ class Animal{
 ***
 
 
-
-#### 方法访问
-
-子类继承了父类就得到了父类的方法，**可以直接调用**，受权限修饰符的限制，也可以重写方法
-
-方法重写：子类重写一个与父类申明一样的方法来**覆盖**父类的该方法
-
-方法重写的校验注解：@Override
-
-* 方法加了这个注解，那就必须是成功重写父类的方法，否则报错
-* @Override 优势：可读性好，安全，优雅
-
-**子类可以扩展父类的功能，但不能改变父类原有的功能**，重写有以下三个限制：
-
-- 子类方法的访问权限必须大于等于父类方法
-- 子类方法的返回类型必须是父类方法返回类型或为其子类型
-- 子类方法抛出的异常类型必须是父类抛出异常类型或为其子类型
-
-继承中的隐藏问题：
-
-- 子类和父类方法都是静态的，那么子类中的方法会隐藏父类中的方法
-- 在子类中可以定义和父类成员变量同名的成员变量，此时子类的成员变量隐藏了父类的成员变量，在创建对象为对象分配内存的过程中，**隐藏变量依然会被分配内存**
 
 ```java
 public class ExtendsDemo {
@@ -1057,83 +1402,6 @@ class Student{
 }
 ```
 
-***
-
-#### final
-
-基本介绍
-
-final 用于修饰：类，方法，变量
-
-* final 修饰类，类不能被继承了，类中的方法和变量可以使用
-* final 可以修饰方法，方法就不能被重写
-* final 修饰变量总规则：变量有且仅能被赋值一次
-
-final 和 abstract 的关系是**互斥关系**，不能同时修饰类或者同时修饰方法
-
-**修饰变量**
-
-**静态变量**
-
-final 修饰静态成员变量，变量变成了常量
-
-常量：有 public static final 修饰，名称字母全部大写，多个单词用下划线连接
-
-final 修饰静态成员变量可以在哪些地方赋值：
-
-1. 定义的时候赋值一次
-
-2. 可以在静态代码块中赋值一次
-
-```java
-public class FinalDemo {
-	//常量：public static final修饰，名称字母全部大写，下划线连接。
-    public static final String SCHOOL_NAME = "张三" ;
-    public static final String SCHOOL_NAME1;
-
-    static{
-        //SCHOOL_NAME = "java";//报错
-        SCHOOL_NAME1 = "张三1";
-    }
-}
-```
-
-实例变量
-
-final 修饰变量的总规则：有且仅能被赋值一次
-
-final 修饰实例成员变量可以在哪些地方赋值 1 次：
-
-1. 定义的时候赋值一次
-2. 可以在实例代码块中赋值一次
-3. 可以在每个构造器中赋值一次
-
-```java
-public class FinalDemo {
-    private final String name = "张三" ;
-    private final String name1;
-    private final String name2;
-    {
-        // 可以在实例代码块中赋值一次。
-        name1 = "张三1";
-    }
-	//构造器赋值一次
-    public FinalDemo(){
-        name2 = "张三2";
-    }
-    public FinalDemo(String a){
-        name2 = "张三2";
-    }
-
-    public static void main(String[] args) {
-        FinalDemo f1 = new FinalDemo();
-        //f1.name = "张三1"; // 第二次赋值 报错！
-    }
-}
-```
-
-***
-
 #### 抽象类
 
 基本介绍
@@ -1231,151 +1499,6 @@ abstract class Template{
 ```
 
 ***
-
-#### 接口
-
-**基本介绍**
-
-接口是 Java 语言中一种引用类型，是方法的集合。
-
-接口是更加彻底的抽象，接口中只有抽象方法和常量，没有其他成分
-
-```java
- 修饰符 interface 接口名称{
-	// 抽象方法
-	// 默认方法
-	// 静态方法
-	// 私有方法
-}
-```
-
-* 抽象方法：接口中的抽象方法默认会加上 public abstract 修饰，所以可以省略不写
-
-* 静态方法：静态方法必须有方法体
-
-* 常量：是 public static final 修饰的成员变量，仅能被赋值一次，值不能改变。常量的名称规范上要求全部大写，多个单词下划线连接，public static final 可以省略不写
-
-  ```java
-  public interface InterfaceDemo{
-      //public static final String SCHOOL_NAME = "张三";
-  	String SCHOOL_NAME = "张三";
-      
-      //public abstract void run();
-      void run();//默认补充
-  }
-  ```
-
-**实现接口**
-
-**接口是用来被类实现的。**
-
-* 类与类是继承关系：一个类只能直接继承一个父类，单继承
-* 类与接口是实现关系：一个类可以实现多个接口，多实现，接口不能继承类
-* 接口与接口继承关系：**多继承**
-
-```java
-修饰符 class 实现类名称 implements 接口1,接口2,接口3,....{
-
-}
-修饰符 interface 接口名 extend 接口1,接口2,接口3,....{
-    
-}
-```
-
-实现多个接口的使用注意事项：
-
-1. 当一个类实现多个接口时，多个接口中存在同名的静态方法并不会冲突，只能通过各自接口名访问静态方法
-
-2. 当一个类实现多个接口时，多个接口中存在同名的默认方法，实现类必须重写这个方法
-
-3. 当一个类既继承一个父类，又实现若干个接口时，父类中成员方法与接口中默认方法重名，子类**就近选择执行父类**的成员方法
-
-4. 接口中，没有构造器，**不能创建对象**，接口是更彻底的抽象，连构造器都没有，自然不能创建对象
-
-   ```java
-   public class InterfaceDemo {
-       public static void main(String[] args) {
-           Student s = new Student();
-           s.run();
-           s.rule();
-       }
-   }
-   class Student implements Food, Person{
-       @Override
-       public void eat() {}
-       
-       @Override
-       public void run() {}
-   }
-   interface Food{
-       void eat();
-   }
-   interface Person{
-       void run();
-   }
-   //可以直接 interface Person extend Food,
-   //然后 class Student implements Person 效果一样
-   ```
-
-   
-
-**新增功能**
-
-jdk1.8 以后新增的功能：
-
-* 默认方法（就是普通实例方法）
-  * 必须用 default 修饰，默认会 public 修饰
-  * 必须用接口的实现类的对象来调用
-  * 必须有默认实现
-* 静态方法
-  * 默认会 public 修饰
-  * 接口的静态方法必须用接口的类名本身来调用
-  * 调用格式：ClassName.method()
-  * 必须有默认实现
-* 私有方法：JDK 1.9 才开始有的，只能在**本类中**被其他的默认方法或者私有方法访问
-
-```java
-public class InterfaceDemo {
-    public static void main(String[] args) {
-        // 1.默认方法调用：必须用接口的实现类对象调用。
-        Man m = new Man();
-        m.run();
-        m.work();
-
-        // 2.接口的静态方法必须用接口的类名本身来调用。
-        InterfaceJDK8.inAddr();
-    }
-}
-class Man implements InterfaceJDK8 {
-    @Override
-    public void work() {
-        System.out.println("工作中。。。");
-    }
-}
-
-interface InterfaceJDK8 {
-    //抽象方法！！
-    void work();
-    // a.默认方法（就是之前写的普通实例方法）
-    // 必须用接口的实现类的对象来调用。
-    default void run() {
-        go();
-        System.out.println("开始跑步🏃‍");
-    }
-
-    // b.静态方法
-    // 注意：接口的静态方法必须用接口的类名本身来调用
-    static void inAddr() {
-        System.out.println("我们在武汉");
-    }
-    
-    // c.私有方法（就是私有的实例方法）: JDK 1.9才开始有的。
-    // 只能在本接口中被其他的默认方法或者私有方法访问。
-    private void go() {
-        System.out.println("开始。。");
-    }
-}
-```
 
 
 
@@ -1489,41 +1612,13 @@ class Cat extends Animal{}
 
 ***
 
-#### instanceof
-
-instanceof：判断左边的对象是否是右边的类的实例，或者是其直接或间接子类，或者是其接口的实现类
-
-* 引用类型强制类型转换：父类类型的变量或者对象强制类型转换成子类类型的变量，否则报错
-* 强制类型转换的格式：**类型 变量名称 = (类型)(对象或者变量)**
-* 有继承/实现关系的两个类型就可以进行强制类型转换，编译阶段一定不报错，但是运行阶段可能出现类型转换异常 ClassCastException
-
-```java
-public class Demo{
-    public static void main(String[] args){
-		Aniaml a = new Dog();
-		//Dog d = (Dog)a;
-        //Cat c = (Cat)a; 编译不报错，运行报ClassCastException错误
-        if(a instanceof Cat){
-            Cat c = (Cat)a; 
-        } else if(a instanceof Dog) {
-            Dog d = (Dog)a;
-        }
-    }
-}
-class Dog extends Animal{}
-class Cat extends Animal{}
-class Animal{}
-```
-
-***
-
 #### 内部类
 
 **概述**
 
 内部类是类的五大成分之一：成员变量，方法，构造器，代码块，内部类
 
-概念：定义在一个类里面的类就是内部类
+概念：定义在一个类里面的类就是类
 
 作用：提供更好的封装性，体现出组件思想，**间接解决类无法多继承引起的一系列问题**
 
@@ -1608,24 +1703,6 @@ abstract class Animal{
 }
 ```
 
-#### 权限符
-
-权限修饰符：有四种**（private -> 缺省 -> protected - > public ）**
-可以修饰成员变量，修饰方法，修饰构造器，内部类，不同修饰符修饰的成员能够被访问的权限将受到限制
-
-| 四种修饰符访问权限 | private | 缺省 | protected | public |
-| ------------------ | :-----: | :--: | :-------: | :----: |
-| 本类中             |    √    |  √   |     √     |   √    |
-| 本包下的子类中     |    X    |  √   |     √     |   √    |
-| 本包下其他类中     |    X    |  √   |     √     |   √    |
-| 其他包下的子类中   |    X    |  X   |     √     |   √    |
-| 其他包下的其他类中 |    X    |  X   |     X     |   √    |
-
-protected 用于修饰成员，表示在继承体系中成员对于子类可见
-
-* 基类的 protected 成员是包内可见的，并且对子类可见
-* 若子类与基类不在同一包中，那么子类实例可以访问其从基类继承而来的 protected 方法（重写），而不能访问基类实例的 protected 方法
-
 #### 代码块
 
 **静态代码块**
@@ -1707,95 +1784,6 @@ public class CodeDemo {
     }
 }
 ```
-
-#### Lambda
-
-组成Lambda表达式的三要素：形式参数，箭头，代码块
-
-**Lambda表达式格式：**
-
-- 格式：（形式参数）--> {代码块}
-- 形式参数：如果有多个参数，用逗号隔开；如果没有参数，留空即可
-- ->：由英文中画线和大于符号组成
-- 代码块：具体要做的事情
-
-**Lambda表达式的省略模式**：
-
-- 参数类型可以省略。如果有多个参数的情况下，不能只省略一个
-- 如果参数有且只有一个，那么小括号可以省略
-- 如果代码块的语句只有一条，可以忽略大括号和分号，甚至return 语句
-
-**Lambda表达式的注意事项**
-
-注意事项：
-
-- 使用Lambda必须要有接口，并且要求接口有且仅有一个抽象方法
-- 必须有上下文环境，才能推导出Lambda对应的接口
-  - 根据局部变量的赋值得知Lambda对应的接口：Runnable r = （）-> System.out.println(”Lambda表达式“);
-  - 根据调用方法的参数得知Lambda对应的接口：new Thread(()->System.out.println(“Lambda表达式”)).start();
-
-**Lambda表达式和匿名内部类的区别**
-
-所需类型不同：
-
-- 匿名内部类：可以是接口，也可以是抽象类，还可以是具体类
-- Lambda表达式：只能是接口
-
-使用限制不同：
-
-- 如果接口中有且仅有一个抽象方法，可以使用Lambda表达式，也可以使用匿名内部类
-- 如果接口中多于一个抽象方法，只能使用匿名内部类，而不能使用Lambda表达式
-
-实现原理不同：
-
-- 匿名内部类：编译之后，产生一个单独的.class字节码文件
-- Lambda表达式：编译之后，没有一个单独的.class字节码文件，对应的字节码会在运行的时候动态生成
-
-#### 方法引用
-
-- ：：该符号为引用运算符，而它所在表达式被称为方法引用
-- Lambda表达式：usePrintable(s->System.out.print(s));
-- 方法引用：usePrinable(System.out::println)
-
-**Lambda表达式支持的方法引用**
-
-常见的引用方式：
-
-- 引用类方法
-- 引用对象的实例方法
-- 引用类的实例方法
-- 引用构造器
-
-**引用类静态方法**
-引用类方法，其实就是引用类的静态方法
-
-- 格式：类名：：静态方法
-
-- 范例：Integer::parseInt
-
-  - Integer类的方法：public static int parsenInt(String s),将此String转换为int类型数据
-
-  Lambda表达式被类方法替代的时候，它的形式参数全部传递给静态方法作为参数
-
-**引用对象的实例方法**
-
-引用对象的实例方法，其实是引用类中的成员方法
-
-- 格式：对象：：成员方法
-- 范式：”HelloWorld“::toUpperCase
-
-**引用类的实例方法**
-
-引用类的实例方法，其实就是引用类中的成员方法
-
-- 格式：类名：：成员方法
-
-- String::substring
-
-**引用构造器**
-
-- 格式：类名：：new
-- 范式：Student：：new
 
 ### JavaAPI
 
@@ -4924,9 +4912,144 @@ List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 Optional<Integer> sum = numbers.stream().reduce((a, b) -> a + b);
 ```
 
+#### Function
+
+**1. 无参数，有返回值（供给型）**
+
+- `Supplier<T>`
+
+  抽象方法：`T get()`
+
+  用途：提供一个类型为 T 的数据（"供给"数据）
+
+   示例：生成随机数
+
+  ```java
+  Supplier<Double> randomSupplier = () -> Math.random();
+  System.out.println(randomSupplier.get()); // 输出随机数
+  ```
+
+**2. 单参数，无返回值（消费型）**
+
+- **`Consumer<T>`**
+  抽象方法：`void accept(T t)`
+  用途：消费一个类型为 `T` 的数据（“处理” 数据，无返回）。
+  示例：打印输入数据
+
+  ```java
+  Consumer<String> printer = (s) -> System.out.println(s);
+  printer.accept("Hello"); // 输出 "Hello"
+  ```
+
+- **`BiConsumer<T, U>`**（双参数，无返回值）
+  抽象方法：`void accept(T t, U u)`
+  用途：消费两个不同类型的数据。
+  示例：打印键值对
+
+  ```java
+  BiConsumer<String, Integer> pairPrinter = (k, v) -> System.out.println(k + ":" + v);
+  pairPrinter.accept("age", 20); // 输出 "age:20"
+  ```
+
+**3. 单参数，有返回值（函数型）**
+
+- **`Function<T, R>`**
+  抽象方法：`R apply(T t)`
+  用途：将类型 `T` 的数据转换为类型 `R` 的数据（“转换” 数据）。
+  示例：字符串转长度
+
+  ```java
+  Function<String, Integer> strLength = (s) -> s.length();
+  System.out.println(strLength.apply("Hello")); // 输出 5
+  ```
+
+- **`UnaryOperator<T>`**（特殊的 `Function`，输入输出类型相同）
+  抽象方法：`T apply(T t)`
+  用途：对类型 `T` 的数据执行一元操作（如自增、转换格式等）。
+  示例：整数加 1
+
+  ```java
+  UnaryOperator<Integer> addOne = (n) -> n + 1;
+  System.out.println(addOne.apply(5)); // 输出 6
+  ```
+
+- **`BiFunction<T, U, R>`**（双参数，有返回值）
+  抽象方法：`R apply(T t, U u)`
+  用途：将两个不同类型的参数转换为另一种类型的结果。
+  示例：两数相加
+
+  ```java
+  BiFunction<Integer, Integer, Integer> sum = (a, b) -> a + b;
+  System.out.println(sum.apply(3, 5)); // 输出 8
+  ```
+
+- **`BinaryOperator<T>`**（特殊的 `BiFunction`，输入输出类型相同）
+  抽象方法：`T apply(T t, T u)`
+  用途：对两个同类型参数执行二元操作（如求和、取最大值）。
+  示例：两数相乘
+
+  ```java
+  BinaryOperator<Integer> multiply = (a, b) -> a * b;
+  System.out.println(multiply.apply(3, 5)); // 输出 15
+  ```
+
+**4. 单参数，返回布尔值（断言型）**
+
+- **`Predicate<T>`**
+  抽象方法：`boolean test(T t)`
+  用途：判断类型 `T` 的数据是否满足条件（“断言”）。
+  示例：判断数字是否为正数
+
+  ```java
+  Predicate<Integer> isPositive = (n) -> n > 0;
+  System.out.println(isPositive.test(5)); // 输出 true
+  ```
+
+- **`BiPredicate<T, U>`**（双参数，返回布尔值）
+  抽象方法：`boolean test(T t, U u)`
+  用途：判断两个参数是否满足条件。
+  示例：判断第一个数是否大于第二个数
+
+  ```java
+  BiPredicate<Integer, Integer> isGreater = (a, b) -> a > b;
+  System.out.println(isGreater.test(5, 3)); // 输出 true
+  ```
+
+**二、其他常用函数式接口（非 `java.util.function` 包）**
+
+- **`Runnable`**（无参数，无返回值）
+  抽象方法：`void run()`
+  用途：表示一个可执行的任务（如线程任务）。
+
+  ```java
+  Runnable task = () -> System.out.println("Task running");
+  new Thread(task).start(); // 启动线程执行任务
+  ```
+
+- **`Callable<V>`**（无参数，有返回值，可抛异常）
+  抽象方法：`V call() throws Exception`
+  用途：表示一个有返回值的任务（常用于线程池）。
+
+  ```java
+  Callable<Integer> task = () -> 1 + 2;
+  Executors.newSingleThreadExecutor().submit(task).get(); // 结果为 3
+  ```
+
+- **`Comparator<T>`**（双参数，返回 int）
+  抽象方法：`int compare(T o1, T o2)`
+  用途：比较两个对象的大小（常用于排序）。
+
+  ```java
+  Comparator<String> lengthComparator = (s1, s2) -> s1.length() - s2.length();
+  List<String> list = Arrays.asList("apple", "banana");
+  list.sort(lengthComparator); // 按长度排序
+  ```
+
+
+
 # Java的八股文
 
-###  ArrayList源码
+## ArrayList源码
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/abf7585f-1d38-46be-a16c-55b832ebe15c.png)
 
@@ -4934,15 +5057,17 @@ Optional<Integer> sum = numbers.stream().reduce((a, b) -> a + b);
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/5161d669-619c-4aa9-a9d6-54d5574daccc.png)
 
-### ArrayList的底层的实现原理是什么？
+---
+
+## ArrayList的底层的实现原理是什么？
 
 
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/6c52c837-f080-4a8a-ab75-126b95ce4c03.png)
 
+---
 
-
-### HashMap的实现原理？
+## HashMap的实现原理？
 
 HashMap的数据结构：底层使用hash表数据结构，即数组和链表或红黑树
 
@@ -4958,19 +5083,27 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 4. 当链表长度大于8且数组长度大于64转换为红黑树
 
-### HashMap的扩容？
+---
+
+## HashMap的扩容？
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/e87b2897-7d2b-4dab-a1e7-f65b71ec2208.png)
 
+---
 
-
-### Hashmap 与 ConcurrentHashMap的区别
+## Hashmap 与 ConcurrentHashMap的区别
 
 ![](https://gulinall-hkw.oss-cn-shenzhen.aliyuncs.com/556d9661-4ecf-4c5b-b6c7-2c27f92f22d0.png)
 
-### RBAC
+---
 
-### 什么是前缀树？
+## RBAC
+
+
+
+---
+
+## 什么是前缀树？
 
 **前缀树**（Trie），又叫字典树，是一种树形数据结构，常用于存储一组字符串。它的每个节点表示一个字符，根节点到某个叶子节点所经过的路径对应一个字符串。前缀树最大的特点是它可以有效地存储和查找字符串，尤其在涉及到字符串前缀查询时效率较高。
 
@@ -5026,25 +5159,458 @@ HashMap的数据结构：底层使用hash表数据结构，即数组和链表或
 
 前缀树的性能非常依赖于字符串的长度 **k**，在字符串数量很大的情况下，它的查询和插入速度仍然保持较好的表现。
 
+---
 
+## 接口内的默认方法和静态方法有什么区别？
 
+在 Java 8 及以上版本中，接口可以包含默认方法（default method）和静态方法（static method），两者的主要区别体现在**定义方式、调用方式、继承特性**和**使用场景**上，具体如下：
 
+1. **定义方式不同**
 
+- **默认方法**：用 `default` 关键字修饰，必须有方法体。
+  示例：
 
+  ```java
+  public interface MyInterface {
+      // 默认方法
+      default void defaultMethod() {
+          System.out.println("这是默认方法");
+      }
+  }
+  ```
 
+- **静态方法**：用 `static` 关键字修饰，必须有方法体。
+  示例：
 
+  ```java
+  public interface MyInterface {
+      // 静态方法
+      static void staticMethod() {
+          System.out.println("这是静态方法");
+      }
+  }
+  ```
 
+**2. 调用方式不同**
 
+- **默认方法**：必须通过接口的**实现类实例**调用（因为默认方法属于实例级别的行为）。
+  示例：
 
+  ```java
+  public class MyImpl implements MyInterface {
+      // 可以不重写默认方法，直接继承
+  }
+  
+  // 调用默认方法
+  MyInterface obj = new MyImpl();
+  obj.defaultMethod(); // 正确（通过实例调用）
+  ```
 
+- **静态方法**：直接通过**接口名**调用（属于接口本身的方法，与实例无关）。
+  示例：
 
+  ```java
+  // 调用静态方法
+  MyInterface.staticMethod(); // 正确（通过接口名调用）
+  ```
 
+**3. 继承与重写特性不同**
 
+- **默认方法**：
+  - 实现类可以**继承**接口的默认方法（无需重写）。
+  - 实现类也可以**重写**默认方法（去掉 `default` 关键字，保留方法体）。
+  - 如果一个类实现了多个接口，且接口中存在**同名默认方法**，则实现类必须显式重写该方法以解决冲突。
+- **静态方法**：
+  - 实现类**不能继承**接口的静态方法（静态方法属于接口本身，与实现类无关）。
+  - 实现类**不能重写**接口的静态方法（即使定义同名静态方法，也只是 “隐藏” 了接口的静态方法，而非重写）。
 
+**4. 使用场景不同**
 
+- **默认方法**：主要用于**接口的扩展**。当需要给接口新增方法时，默认方法可以提供默认实现，避免影响已有的实现类（无需所有实现类都修改）。
+  例如：Java 集合框架中 `Collection` 接口的 `stream()` 方法就是默认方法，用于在不破坏原有实现的前提下新增流式处理功能。
+- **静态方法**：主要用于提供与接口相关的**工具方法或辅助方法**，避免创建工具类（如 `Collections` 工具类的功能可以直接嵌入接口）。
+  例如：`Comparator` 接口的 `comparing()` 静态方法，用于快速创建比较器。
 
+**总结表格**
 
+| 特性     | 默认方法（default）      | 静态方法（static）           |
+| -------- | ------------------------ | ---------------------------- |
+| 修饰符   | 用 `default` 修饰        | 用 `static` 修饰             |
+| 调用方式 | 通过实现类实例调用       | 通过接口名直接调用           |
+| 继承性   | 可被实现类继承，可重写   | 不可被实现类继承，不可重写   |
+| 主要用途 | 接口扩展（提供默认实现） | 提供工具方法（与接口强相关） |
 
+---
+
+## Overload 和 Override的区别
+
+Overload是重载的意思，Override是覆盖的意思，也就是重写。
+
+重载Overload表示同一个类中可以有多个名称相同的方法，但这些方法的参数列表各不相同（即参数个数或类型不同）。
+
+重写Override表示子类中的方法可以与父类中的某个方法的名称和参数完全相同，通过子类创建的实例对象调用这个方法时，将调用子类中的定义方法，这相当于把父类中定义的那个完全相同的方法给覆盖了，这也是面向对象编程的多态性的一种表现。子类覆盖父类的方法时，只能比父类抛出更少的异常，或者是抛出父类抛出的异常的子异常，因为子类可以解决父类的一些问题，不能比父类有更多的问题。子类方法的访问权限只能比父类的更大，不能更小。如果父类的方法是private类型，那么，子类则不存在覆盖的限制，相当于子类中增加了一个全新的方法。
+
+---
+
+## sleep() 和 wait() 有什么区别？
+
+sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时会自动恢复。调用sleep不会释放对象锁。wait 是 Object 类的方法，此对象调用
+
+## BigDecimal 的原理
+
+在 Java 中，`BigDecimal` 是处理**高精度十进制大数计算**的核心类，专门解决 `float` 和 `double` 因二进制浮点数特性导致的精度丢失问题（如 `0.1 + 0.2 != 0.3`）。其核心原理基于**整数存储 + 标度控制**，通过精确表示十进制数的每一位，实现无误差的算术运算。
+
+### 一、为什么需要 `BigDecimal`？
+
+`float` 和 `double` 是**二进制浮点数**，底层用 IEEE 754 标准存储，无法精确表示所有十进制小数（如 `0.1` 在二进制中是无限循环小数），导致计算误差：
+
+```java
+System.out.println(0.1 + 0.2); // 输出 0.30000000000000004（误差）
+```
+
+而 `BigDecimal` 基于**十进制**设计，可精确表示任意精度的小数，适合金融、货币等对精度敏感的场景。
+
+### 二、`BigDecimal` 的核心原理
+
+#### 1. 内部存储结构
+
+`BigDecimal` 内部通过两个核心字段实现高精度存储：
+
+- **`BigInteger intVal`**：存储数值的**整数形式**（包含符号，如 `-12345` 表示 `-123.45` 的整数部分）。
+- **`int scale`**：表示**标度**（小数点后的位数），即数值 = `intVal / (10^scale)`。
+
+例如：
+
+- `3.14` 存储为：`intVal = 314`，`scale = 2`（314 / 10² = 3.14）。
+- `100` 存储为：`intVal = 100`，`scale = 0`（100 / 10⁰ = 100）。
+- `0.005` 存储为：`intVal = 5`，`scale = 3`（5 / 10³ = 0.005）。
+
+#### 2. 运算原理（以核心运算为例）
+
+`BigDecimal` 的运算（加、减、乘、除）本质是对 `intVal` 和 `scale` 的逻辑处理，确保十进制精度不丢失。
+
+##### （1）加法（`add`）
+
+步骤：
+
+- **对齐标度**：将两个数的 `scale` 统一为较大值（如 `3.14`（scale=2） + `2.5`（scale=1）→ 统一为 scale=2，`2.5` 转为 `2.50`）。
+- **整数部分相加**：将 `intVal` 按统一后的 scale 转换为整数（`314 + 250 = 564`）。
+- **结果处理**：新 `scale` 为统一后的 scale（2），即 `564 / 10² = 5.64`。
+
+代码示例：
+
+```java
+BigDecimal a = new BigDecimal("3.14");
+BigDecimal b = new BigDecimal("2.5");
+BigDecimal c = a.add(b); // 结果：5.64
+```
+
+##### （2）减法（`subtract`）
+
+逻辑与加法类似，先对齐标度，再对整数部分做减法：
+
+```java
+BigDecimal a = new BigDecimal("5.0");
+BigDecimal b = new BigDecimal("0.001");
+BigDecimal c = a.subtract(b); // 结果：4.999
+```
+
+##### （3）乘法（`multiply`）
+
+步骤：
+
+- 整数部分直接相乘（`intVal1 * intVal2`）。
+- 新标度为两个数的标度之和（`scale1 + scale2`）。
+
+例如：`3.14`（intVal=314，scale=2） × `2.5`（intVal=25，scale=1）：
+
+- 整数相乘：`314 × 25 = 7850`。
+- 新标度：`2 + 1 = 3`。
+- 结果：`7850 / 10³ = 7.85`。
+
+代码示例：
+
+```java
+BigDecimal a = new BigDecimal("3.14");
+BigDecimal b = new BigDecimal("2.5");
+BigDecimal c = a.multiply(b); // 结果：7.85
+```
+
+##### （4）除法（`divide`）
+
+除法是最复杂的运算，因可能产生无限循环小数（如 `1 ÷ 3`），需指定**舍入模式（RoundingMode）** 控制精度：
+
+步骤：
+
+- 整数部分相除（`intVal1 ÷ intVal2`），根据指定的精度和舍入模式处理余数。
+- 新标度由用户指定（或默认取较大值）。
+
+例如：`1 ÷ 3` 保留 2 位小数，舍入模式为 `HALF_UP`（四舍五入）：
+
+```java
+BigDecimal a = new BigDecimal("1");
+BigDecimal b = new BigDecimal("3");
+// 保留2位小数，四舍五入
+BigDecimal c = a.divide(b, 2, RoundingMode.HALF_UP); // 结果：0.33
+```
+
+#### 3. 舍入模式（`RoundingMode`）
+
+除法、取整等操作中，`BigDecimal` 提供 8 种舍入模式控制精度，核心包括：
+
+- `HALF_UP`：四舍五入（如 `2.35` 保留 1 位 → `2.4`）。
+- `DOWN`：截断（如 `2.35` 保留 1 位 → `2.3`）。
+- `UP`：向上进 1（如 `2.31` 保留 1 位 → `2.4`）。
+- `HALF_EVEN`：银行家舍入法（四舍六入五取偶，如 `2.35` 保留 1 位 → `2.4`，`2.45` 保留 1 位 → `2.4`）。
+
+### 三、`BigDecimal` 与其他大数类的关系
+
+- **`BigInteger`**：`BigDecimal` 的整数部分依赖 `BigInteger` 实现，`BigInteger` 可存储任意大小的整数（突破 `long` 的范围限制），内部用 `int[]` 数组存储十进制数的每一位（如 `12345` 存储为 `[1,2,3,4,5]`）。
+- 两者的共性：均为**不可变类**（每次运算生成新对象），确保线程安全；通过数组存储突破基本类型的长度限制。
+
+### 四、关键注意事项
+
+1. **避免用 `double` 构造 `BigDecimal`**：`new BigDecimal(0.1)` 会因 `0.1` 的二进制精度问题导致初始化误差，应使用字符串构造：
+
+   ```java
+   // 错误：存在精度误差
+   BigDecimal bad = new BigDecimal(0.1); 
+   // 正确：精确初始化
+   BigDecimal good = new BigDecimal("0.1"); 
+   ```
+
+   
+
+2. **主动指定舍入模式**：除法等可能产生无限小数的运算必须指定精度和舍入模式，否则抛出 `ArithmeticException`。
+
+3. **性能权衡**：高精度计算依赖数组操作和逻辑处理，性能低于 `float`/`double`，适合精度优先的场景（如金融），不适合高性能数值计算。
+
+### 总结
+
+`BigDecimal` 的核心原理是通过**整数形式存储数值 + 标度控制小数点位置**，将十进制小数运算转化为整数运算，避免二进制浮点数的精度丢失。其设计兼顾了高精度需求和灵活性（通过舍入模式控制精度），是金融、货币等领域的必备工具。理解其内部存储和运算逻辑，能帮助开发者正确使用以避免精度问题。
+
+---
+
+## 接口和抽象类
+
+接口可以继承接口。抽象类可以实现(implements)接口，抽象类可以继承具体类。抽象类中可以有静态的main方法。
+
+备注：只要明白了接口和抽象类的本质和作用，这些问题都很好回答，想想看，如果自己作为是java语言的设计者，是否会提供这样的支持，如果不提供的话，有什么理由吗？如果没有道理不提供，那答案就是肯定的了。
+
+只有记住抽象类与普通类的唯一区别就是不能创建实例对象和允许有abstract方法。
+
+---
+
+## Java 中 native 是什么意思？
+
+在 Java 中，`native` 是一个关键字，用于声明**本地方法（Native Method）**—— 这类方法的**声明在 Java 代码中**，但**实现逻辑由非 Java 语言（如 C、C++、汇编）编写**，通常用于与底层操作系统、硬件交互，或复用已有的高性能本地库。
+
+### **核心特点**
+
+1. **无 Java 实现体**：`native` 方法仅在 Java 中声明，没有方法体（以分号结束），其实现由外部本地代码提供。
+
+   ```java
+   public class NativeExample {
+       // 声明native方法，无实现体
+       public native void callNativeCode();
+       
+       public static void main(String[] args) {
+           // 加载包含本地实现的动态链接库（.dll/.so/.dylib）
+           System.loadLibrary("NativeImpl"); 
+           new NativeExample().callNativeCode();
+       }
+   }
+   ```
+
+2. **依赖 JNI 接口**：`native` 方法通过 **JNI（Java Native Interface，Java 本地接口）** 与本地代码交互。JNI 是一套规范，定义了 Java 与本地代码的通信协议（如参数传递、内存管理等）。
+
+3. **与平台相关**：本地代码需针对特定操作系统编译（如 Windows 生成 `.dll`，Linux 生成 `.so`，macOS 生成 `.dylib`），因此包含 `native` 方法的 Java 程序可能失去跨平台性。
+
+### **主要用途**
+
+1. **访问底层系统资源**：Java 语言本身是跨平台的，无法直接操作特定系统的硬件或内核 API（如磁盘 IO、网络协议栈、显卡驱动），通过 `native` 方法可调用 C/C++ 编写的系统接口。
+   - 例：`java.lang.System.currentTimeMillis()` 是 `native` 方法，底层通过系统调用获取当前时间戳。
+2. **复用高性能本地库**：对于计算密集型任务（如音视频编码、机器学习推理），C/C++ 性能优于 Java，可通过 `native` 方法调用成熟的本地库（如 FFmpeg、OpenCV）。
+3. **解决 Java 语言限制**：Java 对内存的直接操作（如指针）有严格限制，`native` 方法可突破这些限制（需谨慎使用，避免内存安全问题）。
+
+### **工作流程（以调用 C 实现为例）**
+
+1. **声明 `native` 方法**：在 Java 类中用 `native` 关键字声明方法。
+2. **生成头文件（.h）**：通过 `javac -h` 命令根据 Java 类生成 C 语言头文件，定义 JNI 函数签名（如 `Java_NativeExample_callNativeCode`）。
+3. **编写本地实现**：用 C/C++ 实现头文件中声明的函数，通过 JNI 接口与 Java 交互（如获取参数、返回结果）。
+4. **编译动态链接库**：将本地代码编译为平台相关的动态库（.dll/.so）。
+5. **Java 加载并调用**：通过 `System.loadLibrary()` 加载动态库，直接调用 `native` 方法。
+
+### **注意事项**
+
+1. **性能与安全权衡**：
+   - 优势：本地代码性能高，适合底层操作；
+   - 风险：可能引入内存泄漏、缓冲区溢出等安全问题（Java 的内存管理机制无法管控本地代码）。
+2. **跨平台性丧失**：本地库依赖操作系统，需为不同平台编译不同版本，破坏 Java“一次编写，到处运行” 的特性。
+3. **调试复杂**：本地代码与 Java 代码的调试工具不同（如 C 用 GDB，Java 用 JDB），混合调试难度大。
+4. **避免过度使用**：现代 Java 已通过 JDK 内置 API 封装了大部分底层操作（如 NIO 替代传统 IO 操作），非必要不建议自定义 `native` 方法。
+
+### **常见 `native` 方法示例**
+
+JDK 中大量使用 `native` 方法处理底层逻辑，例如：
+
+- `java.lang.Object.getClass()`：获取对象的运行时类信息，依赖底层虚拟机实现。
+- `java.io.FileInputStream.read()`：读取文件字节，底层调用操作系统的文件读取接口。
+- `sun.misc.Unsafe` 类中的方法：直接操作内存（如 `allocateMemory`），用于高性能框架（如 Netty、Hadoop）。
+
+### **总结**
+
+`native` 关键字是 Java 与底层系统交互的 “桥梁”，允许 Java 调用非 Java 语言实现的方法，弥补了 Java 在底层操作和性能方面的不足。但因其平台依赖性和安全风险，日常开发中较少自定义 `native` 方法，更多是使用 JDK 已封装好的 `native` 接口。理解 `native` 的原理，有助于深入认识 Java 与操作系统的交互机制。
+
+## 一个Java 文件的非 public 顶级类的访问权限是怎么样的？
+
+在 Java 中，一个 `.java` 文件可以包含多个**顶级类**（非内部类），但确实只能有一个类被声明为 `public`（且该类名必须与文件名一致）。其他非 `public` 类的访问权限和访问方式遵循以下规则：
+
+### 一、非 public 类的权限修饰符
+
+Java 中，**顶级类**（非内部类）的访问权限只有两种：
+
+1. **`public`**：全工程可见（整个项目中任何类都可访问）；
+2. **默认权限（无修饰符，package-private）**：仅同一包内的类可见。
+
+> 注意：`private` 和 `protected` 不能修饰顶级类，仅能修饰类内部的成员（字段、方法、内部类）。
+
+### 二、非 public 类的访问方式
+
+非 `public` 类因权限限制，其访问范围取决于所在包：
+
+#### 1. 同一包内的类：直接访问
+
+如果其他类与非 `public` 类在**同一个包**中，可直接创建实例、调用静态成员，无需额外条件。
+
+示例：文件 `Test.java`（包含一个 `public` 类和一个默认权限类）：
+
+```java
+// 文件名必须为 Test.java（与 public 类名一致）
+public class Test {
+    public static void main(String[] args) {
+        // 同一包内，直接访问默认权限类 Helper
+        Helper helper = new Helper();
+        helper.print(); // 输出："我是默认权限类"
+    }
+}
+
+// 非 public 类，默认权限（仅同包可见）
+class Helper {
+    void print() {
+        System.out.println("我是默认权限类");
+    }
+}
+```
+
+同一包下的另一个类 `Other.java`：
+
+```java
+package com.example; // 与 Test.java 同包
+
+public class Other {
+    public void useHelper() {
+        // 同一包，可直接访问 Helper
+        Helper helper = new Helper();
+        helper.print(); 
+    }
+}
+```
+
+#### 2. 不同包的类：无法直接访问
+
+如果其他类与非 `public` 类在**不同包**中，默认权限会限制访问，此时无法直接创建实例或调用其成员。
+
+示例：不同包下的类 `Another.java`：
+
+```java
+package com.other; // 与 Test.java 不同包
+
+import com.example.Helper; // 编译错误：Helper 是默认权限，无法导入
+
+public class Another {
+    public void tryAccess() {
+        Helper helper = new Helper(); // 编译错误：找不到类 Helper（权限不足）
+    }
+}
+```
+
+### 三、非 public 类的典型用途
+
+非 `public` 类通常作为**辅助类**，仅在当前包内配合 `public` 类工作，避免对外暴露无关实现细节：
+
+1. 封装工具方法（仅同包类使用）；
+2. 定义数据模型（仅同包的 `public` 类需要依赖）；
+3. 拆分 `public` 类的复杂逻辑（避免单个类过于庞大）。
+
+### 四、特殊情况：内部类的权限
+
+如果是**内部类**（嵌套在其他类中的类），权限修饰符可以是 `public`、`protected`、`private` 或默认，其访问范围由修饰符决定：
+
+- `private` 内部类：仅外部类可见；
+- `protected` 内部类：外部类、同包类、子类可见；
+- 默认内部类：外部类、同包类可见；
+- `public` 内部类：全工程可见。
+
+```java
+public class Outer {
+    // private 内部类：仅 Outer 类内可见
+    private class PrivateInner {
+        void doSomething() {}
+    }
+    
+    // public 内部类：全工程可见
+    public class PublicInner {
+        void doSomething() {}
+    }
+    
+    public void useInner() {
+        PrivateInner pi = new PrivateInner(); // 合法
+        PublicInner pu = new PublicInner();   // 合法
+    }
+}
+
+// 其他类访问内部类
+class Other {
+    public void accessInner() {
+        Outer outer = new Outer();
+        // 访问 public 内部类（需通过外部类实例）
+        Outer.PublicInner pu = outer.new PublicInner();
+        pu.doSomething(); // 合法
+        
+        // 无法访问 private 内部类
+        Outer.PrivateInner pi = outer.new PrivateInner(); // 编译错误
+    }
+}
+```
+
+### 总结
+
+- 一个 `.java` 文件中，非 `public` 顶级类的权限只能是**默认权限**（package-private），仅同一包内的类可直接访问；
+- 不同包的类无法访问这些非 `public` 类，保证了实现细节的封装；
+- 内部类的权限更灵活（支持 `private`/`protected`），访问范围由修饰符和外部类关系共同决定。
+
+这种设计既允许在一个文件中组织关联类，又通过权限控制避免了不必要的对外暴露，平衡了代码组织性和封装性。
+
+---
+
+## String s = "hello"; s = s + " world!";  这两行代码执行后，原始的String 对象中内容到底改变没有？
+
+没有。
+
+因为String被设计成不可变(immutable)类，所以它的所有对象都是不可变对象。在这段代码中，s原先指向一个String对象，内容是 "Hello"，然后我们对s进行了+操作，那么s所指向的那个对象是否发生了改变呢？答案是没有。这时，s不指向原来那个对象了，而指向了另一个 String对象，内容为"Hello world!"，原来那个对象还存在于内存之中，只是s这个引用变量不再指向它了。
+
+通过上面的说明，我们很容易导出另一个结论，如果经常对字符串进行各种各样的修改，或者说，不可预见的修改，那么使用String来代表字符串的话会引起很大的内存开销。因为 String对象建立之后不能再改变，所以对于每一个不同的字符串，都需要一个String对象来表示。这时，应该考虑使用StringBuffer类，它允许修改，而不是每个不同的字符串都要生成一个新的对象。并且，这两种类的对象转换十分容易。
+
+---
+
+## String 和 StringBuffer 的区别
+
+JAVA平台提供了两个类：String和StringBuffer，它们可以储存和操作字符串，即包含多个字符的字符数据。这个String类提供了数值不可改变的字符串。而这个StringBuffer类提供的字符串进行修改。当你知道字符数据要改变的时候你就可以使用StringBuffer。典型地，你可以使用StringBuffers来动态构造字符数据。另外，String实现了equals方法，new String(“abc”).equals(new String(“abc”)的结果为true,而StringBuffer没有实现equals方法，所以，new StringBuffer(“abc”).equals(new StringBuffer(“abc”)的结果为false。
+
+---
+
+##
 
 
 

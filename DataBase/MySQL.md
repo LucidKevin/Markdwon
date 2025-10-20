@@ -401,7 +401,7 @@ show variables like '%log_error%'
 - 查看二进制日志参数
 
 ```sql
-show variables like '%binlog_format%'
+show variables like '%log_error%'
 ```
 
 ### 查询日志
