@@ -1,0 +1,11 @@
+{
+  "userIgnoreFilters": [
+    "/Users/huangkaiwen/Desktop/Paper"
+  ],
+  "showUnsupportedFiles": false,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "relative",
+  "attachmentFolderPath": "./",
+  "defaultViewMode": "preview",
+  "promptDelete": false
+}
